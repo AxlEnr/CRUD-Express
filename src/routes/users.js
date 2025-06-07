@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 var express = require('express');
 var router = express.Router();
 
@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
-=======
+
 const express = require('express');
 const UserController = require('../controllers/userController');
 
@@ -18,4 +18,4 @@ const controller = new UserController();
 router.get('/', controller.getUsers.bind(controller));
 
 module.exports = router;
->>>>>>> c2b0340f2576b4214835c0454d96416d7a2bb9a5
+

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ProductoRoutes } from "./routes/productoRoutes";
-
+import { ResenaRoutes } from "./routes/resenas.routes";
 
 
 export class AppRoutes {
@@ -8,6 +8,7 @@ export class AppRoutes {
         const router = Router();
 
         router.use("/api/productos", ProductoRoutes.routes);
+        router.use("/api/resenas", ResenaRoutes.routes); 
 
         return router;
     }
