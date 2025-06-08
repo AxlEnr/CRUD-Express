@@ -15,7 +15,7 @@ export class ProductoRoutes {
     router.get("/categoria/:categoriaId", controller.getProductosByCategoria);
 
     // Rutas protegidas (solo admin)
-    router.post("/", 
+    router.post("crear/", 
       AuthMiddleware.validateUserJwt, 
       AuthMiddleware.verificarRol(UserRoles.admin),
       controller.create
@@ -27,13 +27,13 @@ export class ProductoRoutes {
       controller.update
     );
 
-    router.patch("/:id/stock", 
+    router.patch("/actualizar/:id/stock", 
       AuthMiddleware.validateUserJwt,
       AuthMiddleware.verificarRol(UserRoles.admin),
       controller.updateStock
     );
 
-    router.delete("/:id", 
+    router.delete("/eliminar/:id", 
       AuthMiddleware.validateUserJwt,
       AuthMiddleware.verificarRol(UserRoles.admin),
       controller.delete
