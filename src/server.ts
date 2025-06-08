@@ -31,17 +31,10 @@ export class Server {
         this.app.use( compression() );
         
         // Public folder
-        this.app.use(express.static(this.options.publicPath));
+
 
         // Routes
         this.app.use(this.routes);
-
-        this.app.get("/test", (req, res) => {
-            res.sendFile(path.resolve(__dirname, "../../public/Guía de estudio-Las cuentas.pdf"));
-        })
-        this.app.get("*", (req, res) => {
-            res.sendFile(path.join(__dirname, `../../${this.options.publicPath}`, "index.html"));
-        });
         
         this.app.listen(this.options.port, () => {
             console.log(`Servidor escuchando en puerto ${this.options.port}`);
