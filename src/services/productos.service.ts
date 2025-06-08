@@ -1,6 +1,6 @@
 import { prisma } from "../data";
 import { RequestError } from "../errors/RequestErrors";
-import { CreateProductoDto, UpdateProductoDto, DeleteProductoDto } from "../dtos/productos.dto";
+import { CreateProductoDto, UpdateProductoDto, DeleteProductoDto } from "../dtos/prodcuts/productos.dto";
 import { SearchIdDto } from "../dtos/share/search-id.dto";
 
 export class ProductoService {

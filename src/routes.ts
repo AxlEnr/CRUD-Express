@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { ProductoRoutes } from "./routes/productoRoutes";
+import { ProductoRoutes } from "./routes/productos.routes";
+import { UserRoutes } from "./routes/users.routes";
 
 
 
@@ -8,6 +9,7 @@ export class AppRoutes {
         const router = Router();
 
         router.use("/api/productos", ProductoRoutes.routes);
+        router.use("/api/users", UserRoutes.routes);
 
         return router;
     }

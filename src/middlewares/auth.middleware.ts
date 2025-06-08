@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { JwtAdapter } from "../config/jwt.adapter";
+import jwt from "jsonwebtoken";
 import { prisma } from "../data";
-import { RequestError } from "../errors/RequestErrors";
+import { envs } from "../config";
 
 declare global {
   namespace Express {
@@ -16,66 +16,53 @@ declare global {
 
 export class AuthMiddleware {
   static validateUserJwt = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const authorization = req.header('Authorization');
-    if (!authorization) {
-      res.status(401).json({ error: 'No hay token en la petición' });
-      return;
-    }
-    if (!authorization.startsWith('Bearer ')) {
-      res.status(401).json({ error: 'Token Bearer inválido' });
+    const authorization = req.header("Authorization");
+
+    if (!authorization || !authorization.startsWith("Bearer ")) {
+      res.status(401).json({ error: "Token de autorización inválido o ausente" });
       return;
     }
 
-    const token = authorization.split(' ').at(1) || '';
-    
+    const token = authorization.split(" ")[1];
+
     try {
-      const payload = await JwtAdapter.validateToken<{ id: number }>(token);
-      if (!payload) {
-        res.status(401).json({ error: 'Token no válido' });
-        return;
-      }
+      const secret = envs.JWT_SEED;  
+      const payload = jwt.verify(token, secret) as { id: number };
 
-      const user = await prisma.usuarios.findUnique({ 
+      const user = await prisma.usuarios.findUnique({
         where: { id: payload.id },
         select: {
           id: true,
-          rol: true
-        }
+          rol: true,
+        },
       });
 
-      if (!user) {
-        res.status(401).json({ error: 'Token no válido - usuario no encontrado' });
-        return;
-      }
-      if (!user.rol) {
-        res.status(403).json({ error: 'Usuario no tiene rol asignado' });
+      if (!user || !user.rol) {
+        res.status(403).json({ error: "Token válido pero usuario no encontrado o sin rol" });
         return;
       }
 
       req.user = {
         id: user.id,
-        rol: user.rol
+        rol: user.rol,
       };
+
       next();
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Error interno del servidor' });
+      console.error("Error en validateUserJwt:", error);
+      res.status(401).json({ error: "Token no válido o expirado" });
     }
   };
 
   static verificarRol = (...roles: string[]) => {
     return (req: Request, res: Response, next: NextFunction): void => {
       if (!req.user) {
-        res.status(401).json({
-          error: 'Se requiere verificar el token primero'
-        });
+        res.status(401).json({ error: "Token no verificado" });
         return;
       }
 
       if (!roles.includes(req.user.rol)) {
-        res.status(403).json({
-          error: 'No autorizado - Rol insuficiente'
-        });
+        res.status(403).json({ error: "No autorizado - Rol insuficiente" });
         return;
       }
 

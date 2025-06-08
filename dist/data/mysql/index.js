@@ -15,23 +15,30 @@ const config_1 = require("../../config");
 exports.prisma = new client_1.PrismaClient();
 const connectionDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        exports.prisma.$connect();
+        yield exports.prisma.$connect();
         console.log("Base de datos online");
         const { USER_ADMIN, PASSWORD_ADMIN } = config_1.envs;
-        const existAdmin = yield exports.prisma.usuarios.findFirst({ where: { correo: USER_ADMIN } });
+        const existAdmin = yield exports.prisma.usuarios.findFirst({
+            where: { correo: USER_ADMIN }
+        });
         if (!existAdmin) {
             yield exports.prisma.usuarios.create({
                 data: {
                     correo: USER_ADMIN,
-                    contrasena: config_1.bcryptjsAdapter.hash(PASSWORD_ADMIN),
+                    contrasena: yield config_1.bcryptjsAdapter.hash(PASSWORD_ADMIN),
                     telefono: "7757505404",
                     rol: "admin",
                     nombre: "MAEBA"
                 }
             });
+            console.log("Usuario admin creado.");
+        }
+        else {
+            console.log("Usuario admin ya existe.");
         }
     }
     catch (error) {
+        console.error("Error conectando a la base de datos:", error);
         throw error;
     }
 });

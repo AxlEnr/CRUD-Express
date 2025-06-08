@@ -6,7 +6,7 @@ const cors = require('cors');
 
 // Importar ruta creadas //EJEMPLOS
 const indexRouter = require('./src/routes/index');
-const usersRouter = require('./src/routes/users');
+const usersRouter = require('./src/routes/users.routes');
 
 const app = express();
 

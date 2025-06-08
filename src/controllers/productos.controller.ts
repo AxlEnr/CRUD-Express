@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppController } from "./share/AppController";
 import { ProductoService } from "../services/productos.service";
-import { CreateProductoDto, UpdateProductoDto, DeleteProductoDto } from "../dtos/productos.dto";
+import { CreateProductoDto, UpdateProductoDto, DeleteProductoDto } from "../dtos/prodcuts/productos.dto";
 
 export class ProductoController extends AppController {
     constructor(
