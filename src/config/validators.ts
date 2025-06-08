@@ -122,8 +122,9 @@ export class Validators {
 
     public isArray(key: string) {
         this.isRequired(key);
-        if (Array.isArray(this.data[key])) throw `${key} no es un array`;
+        if (!Array.isArray(this.data[key])) throw `${key} no es un array`;
     }
+
 
     public isInteger(key: string) {
         this.isRequired(key);
@@ -149,6 +150,13 @@ export class Validators {
         }
     }
 
+    public isPositive(key: string) {
+        this.isRequired(key);
+        const value = Number(this.data[key]);
+        if (value <= 0) {
+            throw `${key} debe ser un número positivo`;
+        }
+    }
 
     public checkPattern(key: string, pattern: RegExp, message?: string) {
         this.isRequired(key);
@@ -231,6 +239,11 @@ export class Validators {
             if (value.length > max) {
                 throw `${key} no debe exceder los ${max} caracteres`;
             }
+        }
+    }
+    public ifExistIsPositive(key: string) {
+        if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
+            this.isPositive(key);
         }
     }
 }
