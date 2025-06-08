@@ -221,5 +221,23 @@ class Validators {
             }
         }
     }
+    isPhoneNumber(key) {
+        this.isRequired(key);
+        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/; // E.164 format
+        if (!phoneNumberPattern.test(this.data[key])) {
+            throw `${key} no es un número de teléfono válido`;
+        }
+    }
+    ifExistIsPhoneNumber(key) {
+        if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
+            this.isPhoneNumber(key);
+        }
+    }
+    checkValues(key, values) {
+        this.isRequired(key);
+        if (!values.includes(this.data[key])) {
+            throw `${key} debe ser uno de los siguientes valores: ${values.join(", ")}`;
+        }
+    }
 }
 exports.Validators = Validators;
