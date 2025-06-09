@@ -37,6 +37,15 @@ export class UserRoutes {
       }
     );
 
+    //OBTENER ROL DE USUARIO
+    router.get(
+      "/rol",
+      AuthMiddleware.validateUserJwt,
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.getUserRol(req, res).catch(next);
+      }
+    );
+
     //OBTENER USUARIO POR ID
     router.get(
       "/:id",

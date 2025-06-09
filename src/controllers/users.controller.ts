@@ -23,28 +23,6 @@ export class UserController extends AppController {
         .then(data => res.json(data))
         .catch(error => this.triggerError(error, res));
     }
-
-    public getUserLogged = async (req: Request, res: Response) => {
-        try {
-            const userId = req.user?.id;
-
-            if (!userId || isNaN(Number(userId))) {
-            return res.status(401).json({ message: 'ID de usuario no válido desde el token' });
-            }
-
-            const user = await this.userService.getUserInfo({ id: Number(userId) });
-
-            if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-            }
-
-            return res.json(user);
-        } catch (error) {
-            console.error('Error en getUserLogged:', error);
-            return res.status(500).json({ message: 'Error interno del servidor' });
-        }
-    };
-
     
 
     public createUser = async (req: Request, res: Response) => {
@@ -108,6 +86,42 @@ export class UserController extends AppController {
             return res.status(401).json({
                 error: error.message || "Error al autenticar el usuario"
             });
+        }
+    }
+
+        public getUserLogged = async (req: Request, res: Response) => {
+        try {
+            const userId = req.user?.id;
+
+            if (!userId || isNaN(Number(userId))) {
+            return res.status(401).json({ message: 'ID de usuario no válido desde el token' });
+            }
+
+            const user = await this.userService.getUserInfo({ id: Number(userId) });
+
+            if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            return res.json(user);
+        } catch (error) {
+            console.error('Error en getUserLogged:', error);
+            return res.status(500).json({ message: 'Error interno del servidor' });
+        }
+    };
+
+    public getUserRol = async (req: Request, res: Response) => {
+        try {
+            const userId = req.user?.id;
+            if (!userId || isNaN(Number(userId))) {
+                return res.status(401).json({ message: 'ID de usuario no válido desde el token' });
+            }
+
+            const userRol = await this.userService.VerfiyRol({  id: Number(userId) });
+
+            return res.status(200).json(userRol);
+        } catch (error: any){
+            console.error("Error", error);
         }
     }
 

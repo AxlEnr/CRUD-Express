@@ -147,4 +147,24 @@ export class UserService {
 
     return user;
   }
+
+  public async VerfiyRol(idDto: SearchIdDto) {
+    try{
+      if (!idDto.id || isNaN(idDto.id)) {
+        throw new Error('ID inválido o faltante');
+      }
+      const user = await prisma.usuarios.findUnique({
+        where: { id: idDto.id }
+      });
+
+      if (!user) throw RequestError.notFound(`No existe un usuario con el ID ${idDto}.`);
+      if (!user.rol) throw new Error("El usuario debe tener un rol obligatoriamente");
+
+      return user.rol;
+
+    } catch (error: any){
+      console.error("Error: ", error);
+    }
+
+  }
 }
