@@ -9,13 +9,14 @@ export class UpdateUserDto {
         public readonly correo?: string,
         public readonly telefono?: string,
         public readonly contrasena?: string,
+        public readonly rol?: string
     ) {}
 
     public static create(data: DynamicObject, isPatch = false): [string?, UpdateUserDto?] {
         try {
             const validators = new Validators(data);
 
-            //PERMITE PUT Y PATCH
+            // Validaciones condicionales para PATCH
             if (!isPatch) {
                 validators.requiredKeys(
                     "nombre",
@@ -23,36 +24,55 @@ export class UpdateUserDto {
                     "edad",
                     "correo",
                     "telefono",
-                    "fecha_registro",
                     "contrasena",
+                    "rol"
                 );
             }
-            
 
-            validators.isString("nombre");
-            validators.isString("apellido");
-            validators.isString("contrasena");
-            validators.isNumber("edad");
-            validators.isDate("fecha_registro");
-            validators.isEmail("correo");
-            validators.isPhoneNumber("telefono");
-            validators.capitalizar("nombre");
-            validators.capitalizar("apellido");
-            validators.checkLength("contrasena", 6, 100);
-            validators.checkLength("telefono", 10, 15);
-            validators.checkLength("correo", 5, 60);
-            validators.checkLength("edad", 1, 3);
-            validators.checkLength("fecha_registro", 10, 10);
+            // Validaciones solo para campos presentes (PATCH) o todos (PUT)
+            if (data.nombre !== undefined) {
+                validators.isString("nombre");
+                validators.capitalizar("nombre");
+            }
 
-            const { nombre, apellido, contrasena, edad, correo, telefono, rol } = validators.data;
+            if (data.apellido !== undefined) {
+                validators.isString("apellido");
+                validators.capitalizar("apellido");
+            }
+
+            if (data.contrasena !== undefined) {
+                validators.isString("contrasena");
+                validators.checkLength("contrasena", 6, 100);
+            }
+
+            if (data.edad !== undefined) {
+                validators.isNumber("edad");
+                validators.checkLength("edad", 1, 3);
+            }
+
+            if (data.correo !== undefined) {
+                validators.isEmail("correo");
+                validators.checkLength("correo", 5, 60);
+            }
+
+            if (data.telefono !== undefined) {
+                validators.isPhoneNumber("telefono");
+                validators.checkLength("telefono", 10, 15);
+            }
+
+            if (data.rol !== undefined) {
+                validators.isString("rol");
+            }
+
             return [undefined, new UpdateUserDto(
-                nombre,
-                apellido,
-                edad.toString(),
-                correo,
-                telefono,
-                contrasena,
-            )]
+                data.nombre,
+                data.apellido,
+                data.edad?.toString(),
+                data.correo,
+                data.telefono,
+                data.contrasena,
+                data.rol
+            )];
         } catch (error: any) {
             return [error as string, undefined];
         }

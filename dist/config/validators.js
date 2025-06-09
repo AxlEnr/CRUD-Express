@@ -7,8 +7,10 @@ class Validators {
     }
     requiredKeys(...keys) {
         keys.forEach(k => {
-            if (!this.data[k])
+            const value = this.data[k];
+            if (value === undefined || value === null) {
                 throw `${k} faltante`;
+            }
         });
     }
     isRequired(key) {

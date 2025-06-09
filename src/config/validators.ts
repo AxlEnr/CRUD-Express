@@ -7,7 +7,10 @@ export class Validators {
 
     public requiredKeys(...keys: string[]) {
         keys.forEach(k => {
-            if (!this.data[k]) throw `${k} faltante`;
+            const value = this.data[k];
+            if (value === undefined || value === null) {
+                throw `${k} faltante`;
+            }
         })
     }
 
