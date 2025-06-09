@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { ProductoRoutes } from "./routes/productos.routes";
+import { UserRoutes } from "./routes/users.routes";
+
 
 import { ResenaRoutes } from "./routes/resenas.routes";
 import { ProductoRoutes } from "./routes/productos.routes";
