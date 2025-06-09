@@ -18,16 +18,15 @@ export class UserRoutes {
       controller.login(req, res).catch(next);
     });
 
-    //RUTAS PROTEGIDAS (validateUserJwt -> valida JWT en logueo | verificarRol -> Verifica Rol especifico)
-    //OBTENER TODOS LOS USUARIOS
     router.get(
       "/",
-      AuthMiddleware.validateUserJwt,
-      AuthMiddleware.verificarRol("admin"),
       (req: Request, res: Response, next: NextFunction) => {
         controller.getAllUsers(req, res).catch(next);
       }
     );
+
+    //RUTAS PROTEGIDAS (validateUserJwt -> valida JWT en logueo | verificarRol -> Verifica Rol especifico)
+    //OBTENER TODOS LOS USUARIOS
 
     router.get(
       "/me",
