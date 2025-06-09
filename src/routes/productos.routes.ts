@@ -21,13 +21,13 @@ export class ProductoRoutes {
       controller.create
     );
 
-    router.put("/:id", 
-      AuthMiddleware.validateUserJwt,
-      AuthMiddleware.verificarRol(UserRoles.admin),
+    router.put("/actualizar/:id",
+      AuthMiddleware.validateUserJwt, 
+      AuthMiddleware.verificarRol("admin"), 
       controller.update
     );
 
-    router.patch("/actualizar/:id/stock", 
+    router.patch("/:id/stock", 
       AuthMiddleware.validateUserJwt,
       AuthMiddleware.verificarRol(UserRoles.admin),
       controller.updateStock

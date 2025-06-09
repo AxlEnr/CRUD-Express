@@ -241,6 +241,19 @@ export class Validators {
             }
         }
     }
+    public isPhoneNumber(key: string) {
+        this.isRequired(key);
+        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
+        if (!phoneNumberPattern.test(this.data[key])) {
+            throw `${key} no es un número de teléfono válido`;
+        }
+    }
+    public ifExistIsPhoneNumber(key: string) {
+        if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
+            this.isPhoneNumber(key);
+        }
+    }
+
     public ifExistIsPositive(key: string) {
         if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
             this.isPositive(key);
