@@ -254,6 +254,14 @@ export class Validators {
         }
     }
 
+    public checkValues(key: string, values: any[string]) {
+        this.isRequired(key);
+        if (!values.includes(this.data[key])) {
+            throw `${key} debe ser uno de los siguientes valores: ${values.join(", ")}`;
+        }
+
+    }
+
     public ifExistIsPositive(key: string) {
         if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
             this.isPositive(key);
