@@ -4,6 +4,7 @@ import { UserService } from "../services/user.service";
 import { AppController } from "./share/AppController";
 import { CreateUserDto, UpdateUserDto } from "../dtos/index.dto";
 import { JwtService } from "../services/auth/jwt.service";
+import { SearchIdDto } from "../dtos/share/search-id.dto";
 
 
 export class UserController extends AppController {
@@ -22,6 +23,29 @@ export class UserController extends AppController {
         .then(data => res.json(data))
         .catch(error => this.triggerError(error, res));
     }
+
+    public getUserLogged = async (req: Request, res: Response) => {
+        try {
+            const userId = req.user?.id;
+
+            if (!userId || isNaN(Number(userId))) {
+            return res.status(401).json({ message: 'ID de usuario no válido desde el token' });
+            }
+
+            const user = await this.userService.getUserInfo({ id: Number(userId) });
+
+            if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+            }
+
+            return res.json(user);
+        } catch (error) {
+            console.error('Error en getUserLogged:', error);
+            return res.status(500).json({ message: 'Error interno del servidor' });
+        }
+    };
+
+    
 
     public createUser = async (req: Request, res: Response) => {
         const [validationError, userDTO] = await CreateUserDto.create(req.body);

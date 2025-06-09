@@ -35,6 +35,24 @@ export class UserService {
     }
   }
 
+  public async getUserInfo(idDto: SearchIdDto) {
+    try {
+      if (!idDto.id || isNaN(idDto.id)) {
+        throw new Error('ID inválido o faltante');
+      }
+
+      const user = await prisma.usuarios.findUnique({
+        where: { id: idDto.id }
+      });
+
+      return user;
+    } catch (error: any) {
+      console.error("Error en UserService:", error.message);
+      throw error;
+    }
+  }
+
+
   public async createUser(createUser: CreateUserDto) {
     try{
       const emailExists = await prisma.usuarios.findUnique({

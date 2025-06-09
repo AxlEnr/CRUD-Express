@@ -120,7 +120,7 @@ class Validators {
     }
     isArray(key) {
         this.isRequired(key);
-        if (Array.isArray(this.data[key]))
+        if (!Array.isArray(this.data[key]))
             throw `${key} no es un array`;
     }
     isInteger(key) {
@@ -142,6 +142,13 @@ class Validators {
         const value = this.data[key];
         if (typeof value !== "string" || value.length < min) {
             throw `${key} debe tener al menos ${min} caracteres`;
+        }
+    }
+    isPositive(key) {
+        this.isRequired(key);
+        const value = Number(this.data[key]);
+        if (value <= 0) {
+            throw `${key} debe ser un número positivo`;
         }
     }
     checkPattern(key, pattern, message) {
@@ -225,7 +232,7 @@ class Validators {
     }
     isPhoneNumber(key) {
         this.isRequired(key);
-        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/; // E.164 format
+        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/;
         if (!phoneNumberPattern.test(this.data[key])) {
             throw `${key} no es un número de teléfono válido`;
         }
@@ -239,6 +246,11 @@ class Validators {
         this.isRequired(key);
         if (!values.includes(this.data[key])) {
             throw `${key} debe ser uno de los siguientes valores: ${values.join(", ")}`;
+        }
+    }
+    ifExistIsPositive(key) {
+        if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
+            this.isPositive(key);
         }
     }
 }

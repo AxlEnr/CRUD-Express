@@ -8,14 +8,18 @@ export class UserRoutes {
     const router = Router();
     const controller = new UserController(new UserService());
 
+    //CREAR USUARIO
     router.post("/", (req: Request, res: Response, next: NextFunction) => {
       controller.createUser(req, res).catch(next);
     });
 
+    //LOGUEAR USUARIO 
     router.post("/login", (req: Request, res: Response, next: NextFunction) => {
       controller.login(req, res).catch(next);
     });
 
+    //RUTAS PROTEGIDAS (validateUserJwt -> valida JWT en logueo | verificarRol -> Verifica Rol especifico)
+    //OBTENER TODOS LOS USUARIOS
     router.get(
       "/",
       AuthMiddleware.validateUserJwt,
@@ -26,6 +30,15 @@ export class UserRoutes {
     );
 
     router.get(
+      "/me",
+      AuthMiddleware.validateUserJwt,
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.getUserLogged(req, res).catch(next);
+      }
+    );
+
+    //OBTENER USUARIO POR ID
+    router.get(
       "/:id",
       AuthMiddleware.validateUserJwt,
       (req: Request, res: Response, next: NextFunction) => {
@@ -33,6 +46,7 @@ export class UserRoutes {
       }
     );
 
+    //ACTUALIZAR TODA LA INFO DEL USUARIO
     router.put(
       "/:id",
       AuthMiddleware.validateUserJwt,
@@ -41,6 +55,7 @@ export class UserRoutes {
       }
     );
 
+    //ACTUALIZAR APARTADO ESPECIFICO DEL USUARIO
     router.patch(
       "/:id",
       AuthMiddleware.validateUserJwt,
@@ -48,7 +63,8 @@ export class UserRoutes {
         controller.updateUser(req, res).catch(next);
       }
     );
-
+  
+    //ELIMINAR USUARIO
     router.delete(
       "/:id",
       AuthMiddleware.validateUserJwt,
