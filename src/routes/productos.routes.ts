@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductoController } from "../controllers/productos.controller";
 import { ProductoService } from "../services/productos.service";
 import { AuthMiddleware } from "../middlewares";
+import { UserRoles } from "../data";
 
 export class ProductoRoutes {
   static get routes(): Router {
@@ -14,9 +15,9 @@ export class ProductoRoutes {
     router.get("/categoria/:categoriaId", controller.getProductosByCategoria);
 
     // Rutas protegidas (solo admin)
-    router.post("/crear",
+    router.post("crear/", 
       AuthMiddleware.validateUserJwt, 
-      AuthMiddleware.verificarRol("admin"), 
+      AuthMiddleware.verificarRol(UserRoles.admin),
       controller.create
     );
 
@@ -26,15 +27,15 @@ export class ProductoRoutes {
       controller.update
     );
 
-    router.patch("/:id/stock",
-      AuthMiddleware.validateUserJwt, 
-      AuthMiddleware.verificarRol("admin"), 
+    router.patch("/:id/stock", 
+      AuthMiddleware.validateUserJwt,
+      AuthMiddleware.verificarRol(UserRoles.admin),
       controller.updateStock
     );
 
-    router.delete("/eliminar/:id",
-      AuthMiddleware.validateUserJwt, 
-      AuthMiddleware.verificarRol("admin"), 
+    router.delete("/eliminar/:id", 
+      AuthMiddleware.validateUserJwt,
+      AuthMiddleware.verificarRol(UserRoles.admin),
       controller.delete
     );
 
