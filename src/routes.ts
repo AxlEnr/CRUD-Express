@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ProductoRoutes } from "./routes/productoRoutes";
+import { ProductoRoutes } from "./routes/productos.routes";
 import { CarritoRoutes } from "./routes/carritroRoutes";
 import { OrdenesRoutes } from "./routes/ordenesRoutes";
 import { OrdenDetalleRoutes } from "./routes/ordenesDetallesRoutes";

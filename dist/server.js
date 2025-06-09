@@ -13,7 +13,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Server = void 0;
-const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const compression_1 = __importDefault(require("compression"));
@@ -31,15 +30,8 @@ class Server {
             this.app.use((0, cors_1.default)());
             this.app.use((0, compression_1.default)());
             // Public folder
-            this.app.use(express_1.default.static(this.options.publicPath));
             // Routes
             this.app.use(this.routes);
-            this.app.get("/test", (req, res) => {
-                res.sendFile(path_1.default.resolve(__dirname, "../../public/Guía de estudio-Las cuentas.pdf"));
-            });
-            this.app.get("*", (req, res) => {
-                res.sendFile(path_1.default.join(__dirname, `../../${this.options.publicPath}`, "index.html"));
-            });
             this.app.listen(this.options.port, () => {
                 console.log(`Servidor escuchando en puerto ${this.options.port}`);
             });
