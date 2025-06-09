@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductoController = void 0;
 const AppController_1 = require("./share/AppController");
-const productos_dto_1 = require("../dtos/productos.dto");
+const productos_dto_1 = require("../dtos/prodcuts/productos.dto");
 class ProductoController extends AppController_1.AppController {
     constructor(productoService) {
         super();

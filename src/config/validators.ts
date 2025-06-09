@@ -233,4 +233,24 @@ export class Validators {
             }
         }
     }
+    public isPhoneNumber(key: string) {
+        this.isRequired(key);
+        const phoneNumberPattern = /^\+?[1-9]\d{1,14}$/; // E.164 format
+        if (!phoneNumberPattern.test(this.data[key])) {
+            throw `${key} no es un número de teléfono válido`;
+        }
+    }
+    public ifExistIsPhoneNumber(key: string) {
+        if (this.data[key] !== undefined && this.data[key] !== null && this.data[key] !== '') {
+            this.isPhoneNumber(key);
+        }
+    }
+
+    public checkValues(key: string, values: any[string]) {
+        this.isRequired(key);
+        if (!values.includes(this.data[key])) {
+            throw `${key} debe ser uno de los siguientes valores: ${values.join(", ")}`;
+        }
+
+    }
 }
