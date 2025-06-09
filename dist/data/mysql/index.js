@@ -28,7 +28,9 @@ const connectionDB = () => __awaiter(void 0, void 0, void 0, function* () {
                     contrasena: yield config_1.bcryptjsAdapter.hash(PASSWORD_ADMIN),
                     telefono: "7757505404",
                     rol: "admin",
-                    nombre: "MAEBA"
+                    nombre: "MAEBA",
+                    apellido: "",
+                    edad: ""
                 }
             });
             console.log("Usuario admin creado.");
