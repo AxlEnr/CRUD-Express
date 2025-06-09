@@ -41,12 +41,11 @@ export class UserController extends AppController {
     //PERMITE PUT Y PATCH
     public updateUser = async (req: Request, res: Response) => {
         try {
-            const isPatch = req.method === "PATCH";
-            const [validationError, userDTO] = await UpdateUserDto.create({ 
-                ...req.body, 
-                id: Number(req.params.id) 
-            },
-            isPatch);
+            const isPatch = req.method === "PATCH"; // Detecta si es PATCH
+            const [validationError, userDTO] = await UpdateUserDto.create(
+                { ...req.body, id: Number(req.params.id) },
+                isPatch // Pasa el flag al DTO
+            );
             
             if (validationError || !userDTO) {
                 return res.status(400).json({ validationError });
@@ -55,8 +54,7 @@ export class UserController extends AppController {
             const searchIdDto = { id: Number(req.params.id) };
             const updatedUser = await this.userService.updateUser(searchIdDto, userDTO);
             
-            res.status(201).json(updatedUser);
-
+            return res.status(200).json(updatedUser);
         } catch (error) {
             this.triggerError(error, res);
         }

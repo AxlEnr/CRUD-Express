@@ -62,30 +62,40 @@ export class UserService {
   }
 
   public async updateUser(idDto: SearchIdDto, updateUser: UpdateUserDto) {
-    try{
-      const userExists = await prisma.usuarios.findUnique({
-        where: { id: idDto.id }
-      })
-      if (!userExists) {
-        throw RequestError.notFound(`El usuario con correo ${updateUser.correo} no existe.`);
-      }
+    try {
+        const userExists = await prisma.usuarios.findUnique({
+            where: { id: idDto.id }
+        });
+        
+        if (!userExists) {
+            throw RequestError.notFound(`El usuario con id ${idDto.id} no existe.`);
+        }
 
-      //FILTRAR UNDEFINED ELIMINANDOLAS
-      const updatedData = Object.fromEntries(
-        Object.entries(updateUser).filter(([_, v]) => v !== undefined)
-      );
-      if (updateUser.contrasena) updatedData.contrasena = await bcryptjsAdapter.hash(updateUser.contrasena);
-      const {contrasena, ...userData} = await prisma.usuarios.update({
-        where: { id: idDto.id },
-        data: updatedData
-      });
+        // Filtrar campos undefined y procesar contraseña
+        const updateData: any = {};
+        
+        if (updateUser.nombre !== undefined) updateData.nombre = updateUser.nombre;
+        if (updateUser.apellido !== undefined) updateData.apellido = updateUser.apellido;
+        if (updateUser.edad !== undefined) updateData.edad = updateUser.edad;
+        if (updateUser.correo !== undefined) updateData.correo = updateUser.correo;
+        if (updateUser.telefono !== undefined) updateData.telefono = updateUser.telefono;
+        if (updateUser.rol !== undefined) updateData.rol = updateUser.rol as usuarios_rol;
+        
+        if (updateUser.contrasena !== undefined) {
+            updateData.contrasena = await bcryptjsAdapter.hash(updateUser.contrasena);
+        }
 
-      return userData;
+        const { contrasena, ...userData } = await prisma.usuarios.update({
+            where: { id: idDto.id },
+            data: updateData
+        });
+
+        return userData;
     } catch (error: any) {
-      console.error("Error en UserService:", error);
-      throw error;
+        console.error("Error en UserService:", error);
+        throw error;
     }
-  }
+}
 
   public async deleteUser(idDto: SearchIdDto) {
     try {
