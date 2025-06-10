@@ -161,7 +161,8 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.15.30"
+    "@types/node": "^22.15.30",
+    "ts-node-dev": "^2.0.0"
   },
   "scripts": {
     "dev": "tsnd --respawn --clear ./src/app.ts",
