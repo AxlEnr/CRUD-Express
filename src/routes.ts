@@ -8,6 +8,7 @@ import { UserRoutes } from "./routes/users.routes";
 
 
 
+
 export class AppRoutes {
     static get routes(): Router {
         const router = Router();
