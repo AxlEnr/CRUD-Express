@@ -15,7 +15,7 @@ export class ProductoRoutes {
     router.get("/categoria/:categoriaId", controller.getProductosByCategoria);
 
     // Rutas protegidas (solo admin)
-    router.post("crear/", 
+    router.post("/crear", 
       AuthMiddleware.validateUserJwt, 
       AuthMiddleware.verificarRol(UserRoles.admin),
       controller.create

@@ -3,10 +3,13 @@ import { SearchIdDto } from "../dtos/share/search-id.dto";
 import { RequestError } from "../errors/RequestErrors";
 import { CreateUserDto, UpdateUserDto } from "../dtos/index.dto";
 import { bcryptjsAdapter } from "../config";
+import { password } from "../config/new_password";
+import { EmailService } from "./auth/email.service";
 
 const prisma = new PrismaClient();
 
 export class UserService {
+  private emailService = new EmailService();
   constructor () {}
 
   public async getAllUsers() {
@@ -53,6 +56,8 @@ export class UserService {
   }
 
 
+
+
   public async createUser(createUser: CreateUserDto) {
     try{
       const emailExists = await prisma.usuarios.findUnique({
@@ -84,21 +89,20 @@ export class UserService {
         const userExists = await prisma.usuarios.findUnique({
             where: { id: idDto.id }
         });
-        
+
         if (!userExists) {
-            throw RequestError.notFound(`El usuario con id ${idDto.id} no existe.`);
+            throw RequestError.notFound(`El usuario con ID ${idDto.id} no existe.`);
         }
 
-        // Filtrar campos undefined y procesar contraseña
         const updateData: any = {};
-        
+
         if (updateUser.nombre !== undefined) updateData.nombre = updateUser.nombre;
         if (updateUser.apellido !== undefined) updateData.apellido = updateUser.apellido;
         if (updateUser.edad !== undefined) updateData.edad = updateUser.edad;
         if (updateUser.correo !== undefined) updateData.correo = updateUser.correo;
         if (updateUser.telefono !== undefined) updateData.telefono = updateUser.telefono;
         if (updateUser.rol !== undefined) updateData.rol = updateUser.rol as usuarios_rol;
-        
+
         if (updateUser.contrasena !== undefined) {
             updateData.contrasena = await bcryptjsAdapter.hash(updateUser.contrasena);
         }
@@ -114,6 +118,7 @@ export class UserService {
         throw error;
     }
 }
+
 
   public async deleteUser(idDto: SearchIdDto) {
     try {
@@ -167,4 +172,37 @@ export class UserService {
     }
 
   }
+
+  public async generatePassword(emailDTO: UpdateUserDto) {
+    try {
+      if (!emailDTO.correo) {
+        throw new Error('ID inválido o faltante');
+      }
+
+      const user = await prisma.usuarios.findUnique({
+        where: { correo: emailDTO.correo },
+      });
+
+      if (!user) {
+        throw RequestError.notFound(`No existe un usuario con el correo ${emailDTO.correo}.`);
+      }
+
+      const newPassword = password;
+      const hashedPassword = await bcryptjsAdapter.hash(newPassword);
+
+      await prisma.usuarios.update({
+        where: { correo: emailDTO.correo },
+        data: { contrasena: hashedPassword },
+      });
+
+      await this.emailService.sendNewPasswordEmail(user.correo, newPassword);
+
+      return newPassword;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
+
+  
 }

@@ -54,23 +54,6 @@ export class UserRoutes {
       }
     );
 
-    //ACTUALIZAR TODA LA INFO DEL USUARIO
-    router.put(
-      "/:id",
-      AuthMiddleware.validateUserJwt,
-      (req: Request, res: Response, next: NextFunction) => {
-        controller.updateUser(req, res).catch(next);
-      }
-    );
-
-    //ACTUALIZAR APARTADO ESPECIFICO DEL USUARIO
-    router.patch(
-      "/:id",
-      AuthMiddleware.validateUserJwt,
-      (req: Request, res: Response, next: NextFunction) => {
-        controller.updateUser(req, res).catch(next);
-      }
-    );
   
     //ELIMINAR USUARIO
     router.delete(
@@ -80,6 +63,30 @@ export class UserRoutes {
         controller.deleteUser(req, res).catch(next);
       }
     );
+
+    router.post("/forgot-password",
+      AuthMiddleware.validateUserJwt,
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.generatePassword(req, res).catch(next);
+      }
+    )
+
+    router.put(
+      "/me",
+      AuthMiddleware.validateUserJwt,
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.updateUserLogged(req, res).catch(next);
+      }
+    );
+
+    router.patch(
+      "/me/",
+      AuthMiddleware.validateUserJwt,
+      (req: Request, res: Response, next: NextFunction) => {
+        controller.updateUserLogged(req, res).catch(next);
+      }
+    );
+
 
     return router;
   }
