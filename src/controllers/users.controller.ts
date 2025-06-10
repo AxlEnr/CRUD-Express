@@ -5,6 +5,7 @@ import { AppController } from "./share/AppController";
 import { CreateUserDto, UpdateUserDto } from "../dtos/index.dto";
 import { JwtService } from "../services/auth/jwt.service";
 import { SearchIdDto } from "../dtos/share/search-id.dto";
+import { prisma } from "../data";
 
 
 export class UserController extends AppController {
@@ -89,7 +90,7 @@ export class UserController extends AppController {
         }
     }
 
-        public getUserLogged = async (req: Request, res: Response) => {
+    public getUserLogged = async (req: Request, res: Response) => {
         try {
             const userId = req.user?.id;
 
@@ -110,6 +111,44 @@ export class UserController extends AppController {
         }
     };
 
+        //PERMITE PUT Y PATCH
+    public updateUserLogged = async (req: Request, res: Response) => {
+    try {
+        const isPatch = req.method === "PATCH";
+        const userId = Number(req.user?.id);
+
+        if (!userId || isNaN(userId)) {
+            return res.status(401).json({ message: 'ID de usuario no válido desde el token' });
+        }
+
+        const [validationError, userDTO] = await UpdateUserDto.create(
+            { ...req.body, id: userId },
+            isPatch
+        );
+
+        if (validationError || !userDTO) {
+            return res.status(400).json({ validationError });
+        }
+
+        // Si no viene `contrasena`, no se modifica
+        const updatedUser = await this.userService.updateUser({ id: userId }, userDTO);
+
+        return res.status(200).json({
+            message: "Usuario actualizado correctamente",
+            user: updatedUser
+        });
+
+    } catch (error) {
+        console.error("Error en updateUserLogged:", error);
+        return res.status(500).json({ message: 'Error interno del servidor' });
+    }
+};
+
+
+
+
+    
+
     public getUserRol = async (req: Request, res: Response) => {
         try {
             const userId = req.user?.id;
@@ -121,8 +160,43 @@ export class UserController extends AppController {
 
             return res.status(200).json(userRol);
         } catch (error: any){
-            console.error("Error", error);
+            return res.status(500).json({ message: error.message || 'Error interno del servidor' });
         }
     }
+
+    public generatePassword = async (req: Request, res: Response) => {
+            try {
+                const { correo } = req.body;
+
+                if (!correo) {
+                    return res.status(400).json({ message: 'El campo "correo" es requerido' });
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(correo)) {
+                    return res.status(400).json({ message: 'Formato de correo electrónico inválido' });
+                }
+
+                const newPassword = await this.userService.generatePassword({ correo } as UpdateUserDto);
+
+                return res.status(200).json({
+                    message: 'Contraseña generada y enviada al correo electrónico registrado',
+                    success: true
+                });
+            } catch (error: any) {
+                if (error.message.includes('No existe un usuario')) {
+                    return res.status(404).json({ 
+                        success: false,
+                        message: error.message 
+                    });
+                }
+                
+                return res.status(500).json({ 
+                    success: false,
+                    message: 'Error al procesar la solicitud' 
+                });
+            }
+        };
+
 
 }

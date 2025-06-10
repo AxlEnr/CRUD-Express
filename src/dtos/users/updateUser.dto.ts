@@ -46,7 +46,7 @@ export class UpdateUserDto {
             }
 
             if (data.edad !== undefined) {
-                validators.isNumber("edad");
+                validators.isString("edad");
                 validators.checkLength("edad", 1, 3);
             }
 
@@ -67,7 +67,7 @@ export class UpdateUserDto {
             return [undefined, new UpdateUserDto(
                 data.nombre,
                 data.apellido,
-                data.edad?.toString(),
+                data.edad,
                 data.correo,
                 data.telefono,
                 data.contrasena,
