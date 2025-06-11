@@ -30,9 +30,33 @@ export const connectionDB = async () => {
         } else {
             console.log("Usuario admin ya existe.");
         }
+        
+        const categoriasExistentes = await prisma.categorias.findMany({
+            where: {
+                nombre: {
+                    in: ["Hombres", "Mujeres"]
+                }
+            }
+        });
+
+        const nombresExistentes = categoriasExistentes.map(cat => cat.nombre);
+
+        if (!nombresExistentes.includes("Hombres")) {
+            await prisma.categorias.create({
+                data: { nombre: "Hombres" }
+            });
+            console.log("Categoría 'Hombres' creada.");
+        }
+
+        if (!nombresExistentes.includes("Mujeres")) {
+            await prisma.categorias.create({
+                data: { nombre: "Mujeres" }
+            });
+            console.log("Categoría 'Mujeres' creada.");
+        }
 
     } catch (error) {
         console.error("Error conectando a la base de datos:", error);
         throw error;
     }
-}
+};
