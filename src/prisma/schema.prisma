@@ -80,7 +80,7 @@ model productos {
   marca          String?  @db.VarChar(20)
   capacidad      Int?
   id_categoria   Int?
-  imagen_url     String?  @db.VarChar(100)
+  imagen_url     String?  @db.VarChar(250)
   fecha_creacion DateTime @default(now()) @db.Timestamp(0)
 
   categoria        categorias?      @relation(fields: [id_categoria], references: [id], onDelete: SetNull)
