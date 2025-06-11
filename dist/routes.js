@@ -8,6 +8,7 @@ const ordenesRoutes_1 = require("./routes/ordenesRoutes");
 const ordenesDetallesRoutes_1 = require("./routes/ordenesDetallesRoutes");
 const resenas_routes_1 = require("./routes/resenas.routes");
 const users_routes_1 = require("./routes/users.routes");
+const direccion_routes_1 = require("./routes/direccion.routes");
 class AppRoutes {
     static get routes() {
         const router = (0, express_1.Router)();
@@ -17,6 +18,7 @@ class AppRoutes {
         router.use("/api/ordenesDetalles", ordenesDetallesRoutes_1.OrdenDetalleRoutes.routes);
         router.use("/api/resenas", resenas_routes_1.ResenaRoutes.routes);
         router.use("/api/users", users_routes_1.UserRoutes.routes);
+        router.use("/api/direcciones", direccion_routes_1.DireccionRoutes.routes);
         return router;
     }
 }
