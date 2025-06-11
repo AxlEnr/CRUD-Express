@@ -5,6 +5,7 @@ import { OrdenesRoutes } from "./routes/ordenesRoutes";
 import { OrdenDetalleRoutes } from "./routes/ordenesDetallesRoutes";
 import { ResenaRoutes } from "./routes/resenas.routes";
 import { UserRoutes } from "./routes/users.routes";
+import { DireccionRoutes } from "./routes/direccion.routes";
 
 
 
@@ -19,6 +20,7 @@ export class AppRoutes {
         router.use("/api/ordenesDetalles", OrdenDetalleRoutes.routes);
         router.use("/api/resenas", ResenaRoutes.routes);
         router.use("/api/users", UserRoutes.routes);
+        router.use("/api/direcciones", DireccionRoutes.routes);
 
         return router;
     }
