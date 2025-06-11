@@ -38,6 +38,26 @@ const connectionDB = () => __awaiter(void 0, void 0, void 0, function* () {
         else {
             console.log("Usuario admin ya existe.");
         }
+        const categoriasExistentes = yield exports.prisma.categorias.findMany({
+            where: {
+                nombre: {
+                    in: ["Hombres", "Mujeres"]
+                }
+            }
+        });
+        const nombresExistentes = categoriasExistentes.map(cat => cat.nombre);
+        if (!nombresExistentes.includes("Hombres")) {
+            yield exports.prisma.categorias.create({
+                data: { nombre: "Hombres" }
+            });
+            console.log("Categoría 'Hombres' creada.");
+        }
+        if (!nombresExistentes.includes("Mujeres")) {
+            yield exports.prisma.categorias.create({
+                data: { nombre: "Mujeres" }
+            });
+            console.log("Categoría 'Mujeres' creada.");
+        }
     }
     catch (error) {
         console.error("Error conectando a la base de datos:", error);

@@ -60,7 +60,7 @@ export class UserService {
 
   public async createUser(createUser: CreateUserDto) {
     try{
-      const emailExists = await prisma.usuarios.findUnique({
+      const emailExists = await prisma.usuarios.findFirst({
           where: { correo: createUser.correo }
         });
 
@@ -140,7 +140,7 @@ export class UserService {
 
   public async authenticateUser(email: string, password: string) {
     if (!email) throw new Error("El email es obligatorio");
-    const user = await prisma.usuarios.findUnique({
+    const user = await prisma.usuarios.findFirst({
       where: { correo: email }
     });
 
