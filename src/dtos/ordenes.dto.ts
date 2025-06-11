@@ -4,7 +4,6 @@ import { ordenes_estado } from "@prisma/client";
 
 export class CreateOrderDto {
   private constructor(
-    public readonly id_usuario: number,
     public readonly id_direccion: number,
     public readonly items: Array<{
       id_producto: number;
@@ -16,12 +15,11 @@ export class CreateOrderDto {
   static create(data: DynamicObject): [string?, CreateOrderDto?] {
     try {
       const validators = new Validators(data);
-      validators.requiredKeys("id_usuario", "id_direccion", "items");
-      validators.isInteger("id_usuario");
+      validators.requiredKeys("id_direccion", "items");
       validators.isInteger("id_direccion");
       validators.isArray("items");
 
-      const { id_usuario, id_direccion, items } = data;
+      const { id_direccion, items } = data;
 
       // Validar cada item
       items.forEach((item: any) => {
@@ -33,7 +31,6 @@ export class CreateOrderDto {
       return [
         undefined,
         new CreateOrderDto(
-          Number(id_usuario),
           Number(id_direccion),
           items.map((item: any) => ({
             id_producto: Number(item.id_producto),
