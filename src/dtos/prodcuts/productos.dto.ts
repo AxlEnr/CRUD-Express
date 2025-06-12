@@ -27,7 +27,7 @@ export class CreateProductoDto {
             if (data.marca) validators.maxLength("marca", 20);
             if (data.capacidad !== undefined) validators.isInteger("capacidad");
             if (data.id_categoria !== undefined) validators.isInteger("id_categoria");
-            if (data.imagen_url) validators.maxLength("imagen_url", 100);
+            if (data.imagen_url) validators.maxLength("imagen_url", 500);
 
             validators.capitalizar("nombre");
 
@@ -83,7 +83,7 @@ export class UpdateProductoDto {
             if (data.marca !== undefined) validators.maxLength("marca", 20);
             if (data.capacidad !== undefined) validators.isInteger("capacidad");
             if (data.id_categoria !== undefined) validators.isInteger("id_categoria");
-            if (data.imagen_url !== undefined) validators.maxLength("imagen_url", 100);
+            if (data.imagen_url !== undefined) validators.maxLength("imagen_url", 500);
 
             const {
                 id,
