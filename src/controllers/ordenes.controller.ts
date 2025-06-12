@@ -11,12 +11,14 @@ export class OrdenesController extends AppController {
   public createOrder = async (req: Request, res: Response): Promise<void> => {
 
     const [error, createDto] = CreateOrderDto.create(req.body);
+    const userId = req.user?.id
+    console.log(userId);
     if (error || !createDto) {
       res.status(400).json({ error });
       return;
     }
     try {
-      const order = await this.ordenesService.createOrder(createDto);
+      const order = await this.ordenesService.createOrder(createDto, {id: Number(userId)});
       res.status(201).json(order);
     } catch (error) {
       this.triggerError(error, res);

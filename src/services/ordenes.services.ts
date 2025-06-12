@@ -6,11 +6,12 @@ import {
   GetUserOrdersDto,
 } from "../dtos/ordenes.dto";
 import { ordenes_estado } from "@prisma/client";
+import { SearchIdDto } from "../dtos/share/search-id.dto";
 
 export class OrdenesService {
   constructor() {}
 
-  public async createOrder(createDto: CreateOrderDto) {
+  public async createOrder(createDto: CreateOrderDto, idDto: SearchIdDto) {
     // Calcular total
     const total = createDto.items.reduce(
       (sum, item) => sum + item.precio_unitario * item.cantidad,
@@ -20,7 +21,7 @@ export class OrdenesService {
     // Crear orden
     const orden = await prisma.ordenes.create({
       data: {
-        id_usuario: createDto.id_usuario,
+        id_usuario: idDto.id,
         id_direccion: createDto.id_direccion,
         total,
         estado: "pendiente",
