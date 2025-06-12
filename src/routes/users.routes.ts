@@ -20,6 +20,7 @@ export class UserRoutes {
 
     router.get(
       "/",
+      AuthMiddleware.validateUserJwt,
       (req: Request, res: Response, next: NextFunction) => {
         controller.getAllUsers(req, res).catch(next);
       }
