@@ -91,8 +91,12 @@
     </li>
   </ul>
 
-  <h2>✏️ Autor</h2>
-  <p>Desarrollado por <strong>AxlEnr</strong></p>
+  <h2>✏️ Autores</h2>
+  <p>Desarrollado por: 
+    <strong>Axel Enriquez Garcia Vazquez</strong></p>
+    <strong>Arturo Martinez Delgado</strong></p>
+    <strong>Erick Adier Ortiz Cabrera</strong></p>
+    <strong>Mariluz Gayoso Vargas</strong></p>
 
 </body>
 </html>
