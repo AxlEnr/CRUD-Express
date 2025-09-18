@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>CRUD con Express y Prisma</title>
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; background-color: #f8f8f8; color: #333; padding: 2rem;">
   <h1 style="color: #1f6feb;">🔧 CRUD con Express y Prisma</h1>
