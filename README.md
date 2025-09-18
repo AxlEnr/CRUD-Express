@@ -93,7 +93,7 @@
 
   <h2>✏️ Autores</h2>
   <p>Desarrollado por: 
-    <strong>Axel Enriquez Garcia Vazquez</strong></p>
+    <strong>Axel Enriquez García Vázquez</strong></p>
     <strong>Arturo Martinez Delgado</strong></p>
     <strong>Erick Adier Ortiz Cabrera</strong></p>
     <strong>Mariluz Gayoso Vargas</strong></p>
